@@ -1,5 +1,3 @@
-module.exports = {
-    async execute(interaction) {
-        await interaction.reply("Pong!");
-    }
+export async function execute(message){
+    message.reple("Pong!");
 }
