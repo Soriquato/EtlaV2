@@ -1,3 +1,3 @@
 export async function execute(message){
-    message.reple("Pong!");
+    message.reply("Pong!");
 }
