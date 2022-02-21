@@ -1,6 +1,7 @@
 import axios from "axios"
 import etla from "../../index.js"
 import fs from 'fs'
+import Logger from "../log/Logger.js"
 
 export default class SlashCommandHandler {
     constructor(){
@@ -10,9 +11,11 @@ export default class SlashCommandHandler {
             headers: {
                 'Authorization': 'Bot Nzc1Mjk2OTc3MzAyNDU0MzAy.X6kRkw.ddOMN6g2ueFMy1QpdgVjZmWGgPU',
                 'Content-Type': 'application/json'
-            }
+            },
+            baseURL: "https://discord.com/api/v9"
         })
         this.instance = instance
+        this.logger = new Logger
     }
 
     sortSlashCommands(data){
@@ -22,12 +25,12 @@ export default class SlashCommandHandler {
     }
 
     async getAllCurrentSlashCommands(){
-        const response = await instance.get('https://discord.com/api/v9/applications/775296977302454302/commands')
+        const response = await this.instance.get('/applications/775296977302454302/commands')
         return response.data
     }
 
     postSlashCommand(data){
-        instance.post('https://discord.com/api/v9/applications/775296977302454302/commands', data)
+        thisinstance.post('/applications/775296977302454302/commands', data)
     }
 
     getAllEtlaCommands(){
@@ -43,8 +46,12 @@ export default class SlashCommandHandler {
         this.getAllEtlaCommands()
         for(var i = 0;i<this.commands.length;i++){
             if(!(this.slashCommands.includes(this.commands[i]))){
+                this.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
                 let command = await import(`../commandes/${this.commands[i]}.js`)
                 this.postSlashCommand(JSON.stringify(command.informations))
+                this.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
+            }else{
+                this.logger.info(`Slash commande ${this.commands[i]} chargée`)
             }
         }
     }

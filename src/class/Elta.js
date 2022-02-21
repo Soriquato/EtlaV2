@@ -16,6 +16,7 @@ export default class Etla extends Discord.Client {
         this.commands = []
         this.events = []
         this.loadCommands()
+        this.loadSlashCommands()
         
         this.on('ready', async () => {
             this.logger.info(`Logged in as ${this.user.tag}!`)
@@ -49,6 +50,8 @@ export default class Etla extends Discord.Client {
             this.commands.push(file.split('.')[0]);
             this.logger.info(`Commande ${file} chargée`);
         }
+    }
+    loadSlashCommands(){
         this.SlashCommandHandler.checkSlashCommands()
     }
 }
