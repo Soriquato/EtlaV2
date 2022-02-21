@@ -2,6 +2,7 @@ import Discord, { Intents } from 'discord.js';
 import Logger from "../log/Logger.js";
 import fs from 'fs'
 import MessageLoger from '../log/MessageLoger.js';
+import SlashCommandHandler from '../api/SlashCommandHandler.js';
 
 export default class Etla extends Discord.Client {
     constructor(){
@@ -11,12 +12,14 @@ export default class Etla extends Discord.Client {
         });
         this.logger = new Logger()
         this.messageLoger = new MessageLoger()
+        this.SlashCommandHandler = new SlashCommandHandler()
         this.commands = []
         this.events = []
         this.loadCommands()
         
-        this.on('ready', () => {
+        this.on('ready', async () => {
             this.logger.info(`Logged in as ${this.user.tag}!`)
+            console.log(await this.SlashCommandHandler.getAllCurrentSlashCommands())
         })
         this.on('error', (error) => {
             this.logger.error(error.message)
@@ -46,9 +49,6 @@ export default class Etla extends Discord.Client {
             this.commands.push(file.split('.')[0]);
             this.logger.info(`Commande ${file} chargée`);
         }
-    }
-
-    registeredSlashCommands(){
-        
+        this.SlashCommandHandler.checkSlashCommands()
     }
 }
