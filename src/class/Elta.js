@@ -47,4 +47,8 @@ export default class Etla extends Discord.Client {
             this.logger.info(`Commande ${file} chargée`);
         }
     }
+
+    registeredSlashCommands(){
+        
+    }
 }
