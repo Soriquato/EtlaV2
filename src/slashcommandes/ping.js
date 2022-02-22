@@ -6,14 +6,7 @@ export const informations = {
     "type": 1
 }
 
-export const replyInformations = {
-    "type": 2,
-    "data": {
-        "content": "Pong",
-        "flags": 64,
-    }
-}
-export async function execute(message){
-    message.reply("Pong!");
+export async function execute(interaction){
+    interaction.reply({content: "Pong!", ephemeral: true});
     etla.logger.info("Replied with \"Pong\"")
 }

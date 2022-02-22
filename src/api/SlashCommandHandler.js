@@ -30,17 +30,26 @@ export default class SlashCommandHandler {
     }
 
     postSlashCommand(data){
-        thisinstance.post('/applications/775296977302454302/commands', data)
+        this.instance.post('/applications/775296977302454302/commands', data)
+    }
+
+    deleteSlashCommand(commandId){
+        try {
+            this.instance.delete(`/applications/775296977302454302/commands/${commandId}`)
+        } catch (error) {
+            this.logger.error(error.message)
+        }
     }
 
     getAllEtlaCommands(){
-        const commandFiles = fs.readdirSync('./src/commandes').filter(file => file.endsWith('.js'));
+        const commandFiles = fs.readdirSync('./src/slashcommandes').filter(file => file.endsWith('.js'));
         for(const file of commandFiles) {
             this.commands.push(file.split('.')[0]);
         }
     }
 
     async checkSlashCommands(){
+        let TotalSlashCommands = []
         let currentSlashCommands = await this.getAllCurrentSlashCommands()
         this.sortSlashCommands(currentSlashCommands)
         this.getAllEtlaCommands()
@@ -50,9 +59,13 @@ export default class SlashCommandHandler {
                 let command = await import(`../commandes/${this.commands[i]}.js`)
                 this.postSlashCommand(JSON.stringify(command.informations))
                 this.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
+                this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
+                TotalSlashCommands.push(this.commands[i])
             }else{
-                this.logger.info(`Slash commande ${this.commands[i]} chargée`)
+                this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
+                TotalSlashCommands.push(this.commands[i])
             }
         }
+        return TotalSlashCommands
     }
 }

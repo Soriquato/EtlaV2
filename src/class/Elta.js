@@ -5,7 +5,7 @@ import MessageLoger from '../log/MessageLoger.js';
 import SlashCommandHandler from '../api/SlashCommandHandler.js';
 
 export default class Etla extends Discord.Client {
-    constructor(){
+    constructor (){
         super({
             intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILDS],
             allowedMentions: { parse: ['users'] },
@@ -14,6 +14,7 @@ export default class Etla extends Discord.Client {
         this.messageLoger = new MessageLoger()
         this.SlashCommandHandler = new SlashCommandHandler()
         this.commands = []
+        this.slashCommands = []
         this.events = []
         this.loadCommands()
         this.loadSlashCommands()
@@ -21,6 +22,9 @@ export default class Etla extends Discord.Client {
         this.on('ready', async () => {
             this.logger.info(`Logged in as ${this.user.tag}!`)
             console.log(await this.SlashCommandHandler.getAllCurrentSlashCommands())
+            //this.SlashCommandHandler.deleteSlashCommand("945432775337582662")
+            //this.SlashCommandHandler.deleteSlashCommand("945433963193831484")
+            //this.SlashCommandHandler.deleteSlashCommand("945458502481109094")
         })
         this.on('error', (error) => {
             this.logger.error(error.message)
@@ -42,6 +46,18 @@ export default class Etla extends Discord.Client {
                 }
             } 
         })
+        this.on('interactionCreate', async (interaction) => {
+            const { commandName } = interaction;
+            if(this.slashCommands.includes(commandName)){
+                try {
+                    let command = await import(`../slashcommandes/${commandName}.js`)
+                    await command.execute(interaction)
+                } catch (error) {
+                    this.logger.error(error.message)
+                    interaction.reply({embeds: [this.messageLoger.errorMessage(error.message)], ephemeral: true})
+                }
+            }
+        })
     }
 
     loadCommands() {
@@ -51,7 +67,7 @@ export default class Etla extends Discord.Client {
             this.logger.info(`Commande ${file} chargée`);
         }
     }
-    loadSlashCommands(){
-        this.SlashCommandHandler.checkSlashCommands()
+    async loadSlashCommands(){
+        this.slashCommands = await this.SlashCommandHandler.checkSlashCommands()
     }
 }
