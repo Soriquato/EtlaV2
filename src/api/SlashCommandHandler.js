@@ -29,13 +29,13 @@ export default class SlashCommandHandler {
         return response.data
     }
 
-    postSlashCommand(data){
-        this.instance.post('/applications/775296977302454302/commands', data)
+    async postSlashCommand(data){
+        await this.instance.post('/applications/775296977302454302/commands', data)
     }
 
-    deleteSlashCommand(commandId){
+    async deleteSlashCommand(commandId){
         try {
-            this.instance.delete(`/applications/775296977302454302/commands/${commandId}`)
+            await this.instance.delete(`/applications/775296977302454302/commands/${commandId}`)
         } catch (error) {
             this.logger.error(error.message)
         }
@@ -54,16 +54,24 @@ export default class SlashCommandHandler {
         this.sortSlashCommands(currentSlashCommands)
         this.getAllEtlaCommands()
         for(var i = 0;i<this.commands.length;i++){
-            if(!(this.slashCommands.includes(this.commands[i]))){
-                this.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
-                let command = await import(`../commandes/${this.commands[i]}.js`)
-                this.postSlashCommand(JSON.stringify(command.informations))
-                this.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
-                this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
-                TotalSlashCommands.push(this.commands[i])
-            }else{
-                this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
-                TotalSlashCommands.push(this.commands[i])
+            try {
+                if(!(this.slashCommands.includes(this.commands[i]))){
+                    this.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
+                    let command = await import(`../slashcommandes/${this.commands[i]}.js`)
+                    try {
+                        await this.postSlashCommand(JSON.stringify(command.informations))
+                        this.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
+                        this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
+                        TotalSlashCommands.push(this.commands[i])
+                    } catch (error) {
+                        this.logger.error(error.message)
+                    }
+                }else{
+                    this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
+                    TotalSlashCommands.push(this.commands[i])
+                }
+            } catch (error) {
+                this.logger.error(error.message)
             }
         }
         return TotalSlashCommands

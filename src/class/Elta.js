@@ -21,30 +21,12 @@ export default class Etla extends Discord.Client {
         
         this.on('ready', async () => {
             this.logger.info(`Logged in as ${this.user.tag}!`)
-            console.log(await this.SlashCommandHandler.getAllCurrentSlashCommands())
-            //this.SlashCommandHandler.deleteSlashCommand("945432775337582662")
-            //this.SlashCommandHandler.deleteSlashCommand("945433963193831484")
-            //this.SlashCommandHandler.deleteSlashCommand("945458502481109094")
         })
         this.on('error', (error) => {
             this.logger.error(error.message)
         })
         this.on('messageCreate', async (message) => {
-            let messageArray = message.content.split(" "); 
-            let prefix = "!"
-            if(messageArray[0][0] === prefix){
-                let cmd = messageArray[0].slice(1);
-                let args = message.content.slice(0).split(' '); 
-                if(this.commands.includes(cmd)) {
-                    try {
-                        let command = await import(`../commandes/${cmd}.js`);
-                        await command.execute(message, ...args);
-                    } catch (error) {
-                        this.logger.error(error.message);
-                        message.reply({embeds: [this.messageLoger.errorMessage(error.message)]})
-                    }
-                }
-            } 
+            this.checkCommand(message)
         })
         this.on('interactionCreate', async (interaction) => {
             const { commandName } = interaction;
@@ -69,5 +51,23 @@ export default class Etla extends Discord.Client {
     }
     async loadSlashCommands(){
         this.slashCommands = await this.SlashCommandHandler.checkSlashCommands()
+    }
+
+    async checkCommand(message){
+        let messageArray = message.content.split(" "); 
+        let prefix = "!"
+        if(messageArray[0][0] === prefix){
+            let cmd = messageArray[0].slice(1);
+            let args = message.content.slice(0).split(' '); 
+            if(this.commands.includes(cmd)) {
+                try {
+                    let command = await import(`../commandes/${cmd}.js`);
+                    await command.execute(message, ...args);
+                } catch (error) {
+                    this.logger.error(error.message);
+                    message.reply({embeds: [this.messageLoger.errorMessage(error.message)]})
+                }
+            }
+        } 
     }
 }
