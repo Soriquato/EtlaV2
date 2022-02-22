@@ -23,12 +23,12 @@ export default class SlashCommandHandler {
     }
 
     async getAllCurrentSlashCommands(){
-        const response = await this.instance.get('/applications/775296977302454302/commands')
+        const response = await this.instance.get(`/applications/775296977302454302/commands`)
         return response.data
     }
 
     async postSlashCommand(data){
-        await this.instance.post('/applications/775296977302454302/commands', data)
+        await this.instance.post(`/applications/775296977302454302/commands`, data)
     }
 
     async deleteSlashCommand(commandId){
