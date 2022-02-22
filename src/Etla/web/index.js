@@ -1,8 +1,6 @@
 import express from "express"
 const app = express()
 const port = 3000
-import Logger from '../log/Logger.js'
-let logger = new Logger()
 import etla from "../class/Elta.js"
 
 app.get('/', (req, res) => {

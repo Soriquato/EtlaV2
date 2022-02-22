@@ -15,7 +15,6 @@ export default class SlashCommandHandler {
             baseURL: "https://discord.com/api/v9"
         })
         this.instance = instance
-        this.logger = new Logger
     }
 
     sortSlashCommands(data){
@@ -37,7 +36,7 @@ export default class SlashCommandHandler {
         try {
             await this.instance.delete(`/applications/775296977302454302/commands/${commandId}`)
         } catch (error) {
-            this.logger.error(error.message)
+            etla.logger.error(error.message)
         }
     }
 
@@ -56,22 +55,22 @@ export default class SlashCommandHandler {
         for(var i = 0;i<this.commands.length;i++){
             try {
                 if(!(this.slashCommands.includes(this.commands[i]))){
-                    this.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
+                    etla.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
                     let command = await import(`../src/slashcommandes/${this.commands[i]}.js`)
                     try {
                         await this.postSlashCommand(JSON.stringify(command.informations))
-                        this.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
-                        this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
+                        etla.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
+                        etla.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
                         TotalSlashCommands.push(this.commands[i])
                     } catch (error) {
-                        this.logger.error(error.message)
+                        etla.logger.error(error.message)
                     }
                 }else{
-                    this.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
+                    etla.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
                     TotalSlashCommands.push(this.commands[i])
                 }
             } catch (error) {
-                this.logger.error(error.message)
+                etla.logger.error(error.message)
             }
         }
         return TotalSlashCommands
