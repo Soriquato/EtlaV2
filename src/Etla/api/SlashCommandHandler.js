@@ -23,15 +23,17 @@ export default class SlashCommandHandler {
             method: 'get',
             headers: this.headers
         })
+        etla.logger.info("Les slash commandes enregistrées sur Etla ont été récupérés avec succès")
         return response.json()
     }
 
     async postSlashCommand(data){
         await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands`, {
             method: "post",
-            body: data,
+            body: JSON.stringify(data ?? {desc: "test"}),
             headers: this.headers
         })
+        etla.logger.info(`La slash commande ${data["name"]} a bien été créé`)
     }
 
     async deleteSlashCommand(commandId){
@@ -40,6 +42,7 @@ export default class SlashCommandHandler {
                 method: 'delete',
                 headers: this.headers
             })
+            etla.logger.info(`La slash commande ${data["name"]} a bien été delete`)
         } catch (error) {
             etla.logger.error(error.message)
         }
@@ -63,7 +66,7 @@ export default class SlashCommandHandler {
                     etla.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
                     let command = await import(`../src/slashcommandes/${this.commands[i]}.js`)
                     try {
-                        await this.postSlashCommand(JSON.stringify(command.informations))
+                        await this.postSlashCommand(command.informations)
                         etla.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
                         etla.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
                         TotalSlashCommands.push(this.commands[i])
@@ -78,6 +81,7 @@ export default class SlashCommandHandler {
                 etla.logger.error(error.message)
             }
         }
+        etla.logger.info("Toutes les slash commandes ont bien été chargées")
         return TotalSlashCommands
     }
 }
