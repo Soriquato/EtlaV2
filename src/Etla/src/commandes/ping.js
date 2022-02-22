@@ -7,6 +7,6 @@ export const informations = {
 }
 
 export async function execute(message){
-    message.reply("Pong!");
+    message.reply("Pong Pong!");
     etla.logger.info("Replied with \"Pong\"")
 }
