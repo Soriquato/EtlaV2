@@ -1,4 +1,4 @@
-import axios from "axios"
+import fetch from "node-fetch"
 import etla from "../class/Elta.js"
 import fs from 'fs'
 
@@ -6,14 +6,10 @@ export default class SlashCommandHandler {
     constructor(){
         this.slashCommands = []
         this.commands = []
-        const instance = axios.create({
-            headers: {
-                'Authorization': `Bot ${process.env.TOKEN}`,
-                'Content-Type': 'application/json'
-            },
-            baseURL: "https://discord.com/api/v9"
-        })
-        this.instance = instance
+        this.headers =  {
+            'Authorization': `Bot ${process.env.TOKEN}`,
+            'Content-Type': 'application/json'
+        }
     }
 
     sortSlashCommands(data){
@@ -23,17 +19,27 @@ export default class SlashCommandHandler {
     }
 
     async getAllCurrentSlashCommands(){
-        const response = await this.instance.get(`/applications/775296977302454302/commands`)
-        return response.data
+        const response = await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands`, {
+            method: 'get',
+            headers: this.headers
+        })
+        return response.json()
     }
 
     async postSlashCommand(data){
-        await this.instance.post(`/applications/775296977302454302/commands`, data)
+        await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands`, {
+            method: "post",
+            body: data,
+            headers: this.headers
+        })
     }
 
     async deleteSlashCommand(commandId){
         try {
-            await this.instance.delete(`/applications/775296977302454302/commands/${commandId}`)
+            await fetch(`/applications/775296977302454302/commands/${commandId}`, {
+                method: 'delete',
+                headers: this.headers
+            })
         } catch (error) {
             etla.logger.error(error.message)
         }
