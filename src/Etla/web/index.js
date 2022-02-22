@@ -4,7 +4,7 @@ const port = 3000
 import etla from "../class/Elta.js"
 
 app.get('/', (req, res) => {
-    res.send(etla.commands)
+    res.send(etla.slashCommands)
 })
 
 app.listen(port, () => {

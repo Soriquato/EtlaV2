@@ -74,7 +74,7 @@ export class Etla extends Discord.Client {
 
 const etla = (() => {
     const bot = new Etla();
-    bot.login("Nzc1Mjk2OTc3MzAyNDU0MzAy.X6kRkw.ddOMN6g2ueFMy1QpdgVjZmWGgPU").catch((error) => bot.logger.error(error.message));
+    bot.login(process.env.TOKEN).catch((error) => bot.logger.error(error.message));
     return bot;
   })();
 export default etla;

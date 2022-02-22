@@ -1,7 +1,6 @@
 import axios from "axios"
 import etla from "../class/Elta.js"
 import fs from 'fs'
-import Logger from "../log/Logger.js"
 
 export default class SlashCommandHandler {
     constructor(){
@@ -9,7 +8,7 @@ export default class SlashCommandHandler {
         this.commands = []
         const instance = axios.create({
             headers: {
-                'Authorization': 'Bot Nzc1Mjk2OTc3MzAyNDU0MzAy.X6kRkw.ddOMN6g2ueFMy1QpdgVjZmWGgPU',
+                'Authorization': `Bot ${process.env.TOKEN}`,
                 'Content-Type': 'application/json'
             },
             baseURL: "https://discord.com/api/v9"
