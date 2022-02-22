@@ -1,9 +1,13 @@
-import Etla from './src/class/Elta.js'
-//import { informations } from './src/commandes/ping.js'
-import SlashCommandHandler from './src/api/SlashCommandHandler.js'
+import Logger from './src/Etla/log/Logger.js'
+let log = new Logger()
 
-const etla = new Etla()
-
-etla.login("Nzc1Mjk2OTc3MzAyNDU0MzAy.X6kRkw.ddOMN6g2ueFMy1QpdgVjZmWGgPU")
-
-export default etla
+async function initialize() {
+    try {
+      await import('./src/Etla/class/Elta.js');
+      await import('./src/Etla/web/index.js');
+    } catch (error) {
+      log.error(error.message);
+    }
+  }
+  
+initialize();

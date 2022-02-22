@@ -1,4 +1,4 @@
-import etla from "../../index.js";
+import etla from "../class/Elta.js"
 
 export const informations = {
     "name": "ping",

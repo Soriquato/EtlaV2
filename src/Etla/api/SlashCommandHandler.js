@@ -1,5 +1,5 @@
 import axios from "axios"
-import etla from "../../index.js"
+import etla from "../class/Elta.js"
 import fs from 'fs'
 import Logger from "../log/Logger.js"
 
@@ -42,7 +42,7 @@ export default class SlashCommandHandler {
     }
 
     getAllEtlaCommands(){
-        const commandFiles = fs.readdirSync('./src/slashcommandes').filter(file => file.endsWith('.js'));
+        const commandFiles = fs.readdirSync('./src/Etla/src/slashcommandes').filter(file => file.endsWith('.js'));
         for(const file of commandFiles) {
             this.commands.push(file.split('.')[0]);
         }
@@ -57,7 +57,7 @@ export default class SlashCommandHandler {
             try {
                 if(!(this.slashCommands.includes(this.commands[i]))){
                     this.logger.warn(`Nouvelle slash commandée detectée : ${this.commands[i]}`)
-                    let command = await import(`../slashcommandes/${this.commands[i]}.js`)
+                    let command = await import(`../src/slashcommandes/${this.commands[i]}.js`)
                     try {
                         await this.postSlashCommand(JSON.stringify(command.informations))
                         this.logger.info(`Nouvelle slash commande ajoutée : ${this.commands[i]}`)
