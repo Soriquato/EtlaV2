@@ -1,6 +1,6 @@
 import express from "express"
 const app = express()
-const port = 3000
+const port = process.env.PORT
 import etla from "../class/Elta.js"
 
 app.get('/', (req, res) => {
