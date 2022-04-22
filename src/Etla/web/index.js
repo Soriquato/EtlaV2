@@ -2,9 +2,10 @@ import express from "express"
 const app = express()
 const port = process.env.PORT
 import etla from "../class/Elta.js"
+import prisma from '../db/prisma.js'
 
-app.get('/', (req, res) => {
-    res.send(etla.slashCommands)
+app.get('/', async(req, res) => {
+    res.send(await prisma.user.findMany())
 })
 
 app.listen(port, () => {

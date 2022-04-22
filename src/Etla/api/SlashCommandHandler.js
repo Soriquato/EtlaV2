@@ -44,7 +44,7 @@ export default class SlashCommandHandler {
             })
             etla.logger.info(`La slash commande ${data["name"]} a bien été delete`)
         } catch (error) {
-            etla.logger.error(error.message)
+            etla.logger.error(error)
         }
     }
 
@@ -71,14 +71,14 @@ export default class SlashCommandHandler {
                         etla.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
                         TotalSlashCommands.push(this.commands[i])
                     } catch (error) {
-                        etla.logger.error(error.message)
+                        etla.logger.error(error)
                     }
                 }else{
                     etla.logger.info(`Slash commande ${this.commands[i]}.js chargée`)
                     TotalSlashCommands.push(this.commands[i])
                 }
             } catch (error) {
-                etla.logger.error(error.message)
+                etla.logger.error(error)
             }
         }
         etla.logger.info("Toutes les slash commandes ont bien été chargées")

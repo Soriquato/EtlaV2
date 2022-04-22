@@ -23,7 +23,7 @@ export class Etla extends Discord.Client {
             this.logger.info(`Logged in as ${this.user.tag}!`)
         })
         this.on('error', (error) => {
-            this.logger.error(error.message)
+            this.logger.error(error)
         })
         this.on('messageCreate', async (message) => {
             this.checkCommand(message)
@@ -35,8 +35,8 @@ export class Etla extends Discord.Client {
                     let command = await import(`../src/slashcommandes/${commandName}.js`)
                     await command.execute(interaction)
                 } catch (error) {
-                    this.logger.error(error.message)
-                    interaction.reply({embeds: [this.messageLoger.errorMessage(error.message)], ephemeral: true})
+                    this.logger.error(error)
+                    interaction.reply({embeds: [this.messageLoger.errorMessage(error)], ephemeral: true})
                 }
             }
         })
@@ -61,11 +61,11 @@ export class Etla extends Discord.Client {
             let args = message.content.slice(0).split(' '); 
             if(this.commands.includes(cmd)) {
                 try {
-                    let command = await import(`../commandes/${cmd}.js`);
+                    let command = await import(`../src/commandes/${cmd}.js`);
                     await command.execute(message, ...args);
                 } catch (error) {
-                    this.logger.error(error.message);
-                    message.reply({embeds: [this.messageLoger.errorMessage(error.message)]})
+                    this.logger.error(error);
+                    message.reply({embeds: [this.messageLoger.errorMessage(error)]})
                 }
             }
         } 
@@ -74,7 +74,7 @@ export class Etla extends Discord.Client {
 
 const etla = (() => {
     const bot = new Etla();
-    bot.login(process.env.TOKEN).catch((error) => bot.logger.error(error.message));
+    bot.login(process.env.TOKEN).catch((error) => bot.logger.error(error));
     return bot;
   })();
 export default etla;

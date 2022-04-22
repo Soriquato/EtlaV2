@@ -5,9 +5,10 @@ import 'dotenv/config'
 async function initialize() {
     try {
       await import('./src/Etla/class/Elta.js');
+      await import('./src/Etla/web/main.js')
       await import('./src/Etla/web/index.js');
     } catch (error) {
-      log.error(error.message);
+      log.error(error);
     }
   }
   
