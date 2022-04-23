@@ -27,6 +27,7 @@ export default class SlashCommandHandler {
         return response.json()
     }
 
+    //TODO Make only one request/Verify for the ratelimit
     async postSlashCommand(data){
         await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands`, {
             method: "post",
@@ -36,6 +37,7 @@ export default class SlashCommandHandler {
         etla.logger.info(`La slash commande ${data["name"]} a bien été créé`)
     }
 
+    //TODO Make only one request/Verify for the ratelimit
     async deleteSlashCommand(commandId){
         try {
             await fetch(`/applications/775296977302454302/commands/${commandId}`, {

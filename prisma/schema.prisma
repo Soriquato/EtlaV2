@@ -9,9 +9,10 @@ generator client {
 
 model User {
   id Int @id @default(autoincrement())
-  userId Int @default(0)
+  userId String @unique @default("0")
   quantityCommandeDone Int @default(0)
   currentMoney Int @default(0)
+  guildId String @unique @default("0")
 }
 
 model Item {
