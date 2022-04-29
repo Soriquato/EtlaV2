@@ -11,6 +11,11 @@ export default class EtlaUser{
         this.data = {}
         this.money = 0
         this.quantityCommandeDone = 0
+        this.start()
+    }
+    //TODO This is weird, i mean it works, but cannot we make it work in a better way ?
+    async start(){
+        await this.initialize()
     }
 
     async initialize(){
@@ -26,19 +31,13 @@ export default class EtlaUser{
 
     //TODO Make it work with the class //Works, but TODO upgrade the await thing
     async addMoney(amount){
-        //let result = await prisma.user.findUnique({
-        //    where: {
-        //        userId: '383317521958305802'
-        //    }
-        //})
-        //let money = result["currentMoney"]
-        await this.initialize()
+        //await this.initialize()
         await prisma.user.update({
             where: {
                 userId: "383317521958305802"
             },
             data: {
-                currentMoney: this.money + 20
+                currentMoney: this.money + amount
             }
         })
     }
