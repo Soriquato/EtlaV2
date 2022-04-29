@@ -73,7 +73,7 @@ export class Etla extends Discord.Client {
                     let command = await import(`../src/commandes/${cmd}.js`);
                     await command.execute(message, ...args);
                 } catch (error) {
-                    this.logger.error(error);
+                    this.logger.error(error.message);
                     message.reply({embeds: [this.messageLoger.errorMessage(error.message)]})
                 }
             }

@@ -8,8 +8,8 @@ export const informations = {
 }
 
 export async function execute(message){
-    let GuildMember = new EtlaGuildMember(message.member)
-    console.log(GuildMember.test())
+    let GuildMember = await new EtlaGuildMember(message.author.id)
+    GuildMember.addMoney(20)
     message.reply("Pong Pong!");
     etla.logger.info("Replied with \"Pong\"")
 }

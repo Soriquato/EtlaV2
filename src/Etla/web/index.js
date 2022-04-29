@@ -8,6 +8,10 @@ app.get('/', async(req, res) => {
     res.send(await prisma.user.findMany())
 })
 
+app.get('/addmoney', async(req, res) => {
+    res.send(await prisma.user.findMany())
+})
+
 app.listen(port, () => {
     etla.logger.info(`L'application écoute au port ${port}`)
 })
