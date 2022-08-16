@@ -7,6 +7,7 @@ async function initialize() {
       await import('./src/Etla/class/Elta.js');
       await import('./src/Etla/web/index.js');
     } catch (error) {
+      console.log(error)
       log.error(error);
     }
   }

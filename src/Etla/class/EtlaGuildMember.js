@@ -29,16 +29,59 @@ export default class EtlaUser{
         this.quantityCommandeDone = result.quantityCommandeDone
     }
 
-    //TODO Make it work with the class //Works, but TODO upgrade the await thing
-    async addMoney(amount){
-        //await this.initialize()
-        await prisma.user.update({
+    async getUserInfo(){
+        let result = await prisma.user.findUnique({
             where: {
-                userId: "383317521958305802"
-            },
-            data: {
-                currentMoney: this.money + amount
+                userId: this.id
             }
         })
+        return result
+    }
+
+    //TODO Make it work with the class //Works, but TODO upgrade the await thing
+    async addMoney(amount){
+        let userInfo = await this.getUserInfo()
+        try {
+            await prisma.user.update({
+                where: {
+                    userId: "383317521958305802"
+                },
+                data: {
+                    currentMoney: userInfo.currentMoney + amount
+                }
+            })
+        } catch (error) {
+            etla.logger.error(error.message)
+        }
+    }
+
+    async removeMoney(amount){
+        try {
+            await prisma.user.update({
+                where: {
+                    userId: "383317521958305802"
+                },
+                data: {
+                    currentMoney: this.money - amount
+                }
+            })
+        } catch (error) {
+            etla.logger.error(error.message)
+        }
+    }
+
+    async resetMoney(){
+        try {
+            await prisma.user.update({
+                where: {
+                    userId: "383317521958305802"
+                },
+                data: {
+                    currentMoney: 0
+                }
+            })
+        } catch (error) {
+            etla.logger.error(error.message)
+        }
     }
 }

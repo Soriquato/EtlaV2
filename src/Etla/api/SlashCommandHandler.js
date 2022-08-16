@@ -2,6 +2,7 @@ import fetch from "node-fetch"
 import etla from "../class/Elta.js"
 import fs from 'fs'
 
+//TODO Document this class
 export default class SlashCommandHandler {
     constructor(){
         this.slashCommands = []
@@ -29,22 +30,25 @@ export default class SlashCommandHandler {
 
     //TODO Make only one request/Verify for the ratelimit
     async postSlashCommand(data){
-        await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands`, {
+        let response = await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands`, {
             method: "post",
             body: JSON.stringify(data ?? {desc: "test"}),
             headers: this.headers
         })
         etla.logger.info(`La slash commande ${data["name"]} a bien été créé`)
+        let res = await response.json();
+        console.log(res);
     }
 
     //TODO Make only one request/Verify for the ratelimit
+    //TODO Add the name of the slash command that has been deleted
     async deleteSlashCommand(commandId){
         try {
-            await fetch(`/applications/775296977302454302/commands/${commandId}`, {
+            await fetch(`https://discord.com/api/v9/applications/775296977302454302/commands/${commandId}`, {
                 method: 'delete',
                 headers: this.headers
             })
-            etla.logger.info(`La slash commande ${data["name"]} a bien été delete`)
+            etla.logger.info(`La slash commande a bien été delete`)
         } catch (error) {
             etla.logger.error(error)
         }
