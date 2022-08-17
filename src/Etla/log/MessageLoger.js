@@ -8,7 +8,8 @@ export default class MessageLoger {
     }
     errorMessage(message){
         let embed = new Discord.MessageEmbed()
-        .setDescription(message)
+        console.log(message)
+        .setDescription(message.message ?? message)
         return embed
     }
 }

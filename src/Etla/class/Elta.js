@@ -5,6 +5,7 @@ import MessageLoger from '../log/MessageLoger.js';
 import SlashCommandHandler from '../api/SlashCommandHandler.js';
 import initializeUser from '../utils/eventsFunctions/initializeUser.js';
 import userInDB from '../utils/utilsFunctions/userInDB.js';
+import Interaction from './Interaction.js';
 
 //TODO Event Handler ?
 //TODO Add db client to the Etla Client
@@ -34,7 +35,6 @@ export class Etla extends Discord.Client {
         })
         this.on('interactionCreate', async (interaction) => {
             const { commandName } = interaction;
-            console.log(interaction.user)
             //TODO Await ?
             if(!(await userInDB(interaction.user))){
                 initializeUser(interaction.user)
@@ -42,7 +42,8 @@ export class Etla extends Discord.Client {
             if(this.slashCommands.includes(commandName)){
                 try {
                     let command = await import(`../src/slashcommandes/${commandName}.js`)
-                    await command.execute(interaction)
+                    let interactionClass = new Interaction(interaction)
+                    await command.execute(interactionClass)
                 } catch (error) {
                     this.logger.error(error)
                     interaction.reply({embeds: [this.messageLoger.errorMessage(error)], ephemeral: true})

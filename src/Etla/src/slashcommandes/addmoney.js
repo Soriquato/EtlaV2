@@ -1,4 +1,6 @@
 import etla from "../../class/Elta.js"
+import EtlaUser from "../../class/EtlaGuildMember.js"
+import prisma from "../../db/prisma.js"
 
 export const informations = {
     name: "addmoney",
@@ -18,4 +20,19 @@ export const informations = {
             required: true
         }
     ]
+}
+
+const response = {
+    
+}
+
+export async function execute(interaction){
+    try {
+        let etlaUser = new EtlaUser(interaction.options[0].value)
+        let userInfo = await etlaUser.getUserInfo()
+        await etlaUser.addMoney(interaction.options[1].value)
+
+    } catch(error){
+        etla.logger.error(error)
+    }
 }
