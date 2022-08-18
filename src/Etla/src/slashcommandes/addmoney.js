@@ -22,16 +22,11 @@ export const informations = {
     ]
 }
 
-const response = {
-    
-}
-
 export async function execute(interaction){
     try {
-        let etlaUser = new EtlaUser(interaction.options[0].value)
-        let userInfo = await etlaUser.getUserInfo()
-        await etlaUser.addMoney(interaction.options[1].value)
-
+        let etlaUser = new EtlaUser(interaction.options.getUser('utilisateur').id)
+        await etlaUser.addMoney(interaction.options.getInteger("quantité"))
+        await interaction.reply({content: "Test"})
     } catch(error){
         etla.logger.error(error)
     }
