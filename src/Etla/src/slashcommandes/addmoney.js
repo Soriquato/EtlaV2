@@ -25,8 +25,10 @@ export const informations = {
 export async function execute(interaction){
     try {
         let etlaUser = new EtlaUser(interaction.options.getUser('utilisateur').id)
-        await etlaUser.addMoney(interaction.options.getInteger("quantité"))
-        await interaction.reply({content: "Test"})
+        let addedMoney = interaction.options.getInteger("quantité")
+        await etlaUser.addMoney(addedMoney).then(user => {
+            await interaction.reply({content: `<@${user.id}> a désormais ${user.money} dollars`})
+        })
     } catch(error){
         etla.logger.error(error)
     }

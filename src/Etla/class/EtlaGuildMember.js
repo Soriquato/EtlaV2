@@ -50,6 +50,7 @@ export default class EtlaUser{
                     currentMoney: userInfo.currentMoney + amount
                 }
             })
+            return this
         } catch (error) {
             etla.logger.error(error.message)
         }
